@@ -14,9 +14,10 @@ usersRoute.get(
 
 usersRoute.get(
   '/users/:uuid',
-  (req: Request<{ uuid: string }>, res: Response, next: NextFunction) => {
+  async (req: Request<{ uuid: string }>, res: Response, next: NextFunction) => {
     const uuid = req.params.uuid;
-    res.status(statusCodes.OK).send(uuid);
+    const user = await userRepository.findById(uuid);
+    res.status(statusCodes.OK).send(user);
   }
 );
 
