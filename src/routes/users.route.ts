@@ -16,4 +16,9 @@ usersRoute.get(
   }
 );
 
+usersRoute.post('/users', (req: Request, res: Response, next: NextFunction) => {
+  const newUser = req.body;
+  res.status(statusCodes.CREATED).send(newUser);
+});
+
 export default usersRoute;
