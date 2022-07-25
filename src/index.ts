@@ -1,7 +1,8 @@
-import * as dotenv from 'dotenv'
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
+import errorHandler from './middlewares/error-handler.middleware';
 import statusRouter from './routes/status.route';
 import usersRoute from './routes/users.route';
 
@@ -14,6 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 // Configuracoes das rotas
 app.use(usersRoute);
 app.use(statusRouter);
+
+// Configuracoes dos middlewares de erro
+app.use(errorHandler);
 
 // Inicializacao do servidor
 app.listen(3000, () =>
