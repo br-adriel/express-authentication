@@ -32,12 +32,15 @@ usersRoute.post(
 
 usersRoute.put(
   '/users/:uuid',
-  (req: Request<{ uuid: string }>, res: Response, next: NextFunction) => {
+  async (req: Request<{ uuid: string }>, res: Response, next: NextFunction) => {
     const uuid = req.params.uuid;
     const modifiedUser = req.body;
+
     modifiedUser.uuid = uuid;
 
-    res.status(statusCodes.OK).send(modifiedUser);
+    await userRepository.update(modifiedUser);
+
+    res.sendStatus(statusCodes.OK);
   }
 );
 
