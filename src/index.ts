@@ -5,7 +5,7 @@ import express from 'express';
 import bearerAuthenticationMiddleware from './middlewares/bearer-authentication.middleware';
 import errorHandler from './middlewares/error-handler.middleware';
 import authorizationRoute from './routes/authorization.route';
-import statusRouter from './routes/status.route';
+import statusRoute from './routes/status.route';
 import usersRoute from './routes/users.route';
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuracoes das rotas
 app.use(bearerAuthenticationMiddleware, usersRoute);
-app.use(statusRouter);
+app.use(statusRoute);
 app.use(authorizationRoute);
 
 // Configuracoes dos middlewares de erro
