@@ -2,36 +2,19 @@ import { NextFunction, Request, Response, Router } from 'express';
 import statusCodes from 'http-status-codes';
 import JWT from 'jsonwebtoken';
 import ForbiddenError from '../errors/forbidden.error.model';
+import basicAuthenticationMiddleware from '../middlewares/basic-authentication.middleware';
 import userRepository from '../repositories/user.repository';
 
 const authorizationRoute = Router();
 
 authorizationRoute.post(
   '/token',
+  basicAuthenticationMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const authorizationHeader = req.headers['authorization'];
-      if (!authorizationHeader) {
-        throw new ForbiddenError('Credenciais não informadas');
-      }
-
-      const [authenticationType, token] = authorizationHeader.split(' ');
-      if (authenticationType !== 'Basic' || !token) {
-        throw new ForbiddenError('Tipo inválido de autenticação');
-      }
-
-      const tokenContent = Buffer.from(token, 'base64').toString('utf-8');
-      const [username, password] = tokenContent.split(':');
-      if (!username || !password) {
-        throw new ForbiddenError('Credenciais não preenchidas');
-      }
-
-      const user = await userRepository.findByUsernameAndPassword(
-        username,
-        password
-      );
+      const user = req.user;
       if (!user) {
-        throw new ForbiddenError('Username ou senha inválidos');
+        throw new ForbiddenError('Usuario nao informado');
       }
 
       const JWTPayload = { username: user.username };
