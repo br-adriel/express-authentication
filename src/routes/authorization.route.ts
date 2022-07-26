@@ -3,7 +3,7 @@ import statusCodes from 'http-status-codes';
 import JWT from 'jsonwebtoken';
 import ForbiddenError from '../errors/forbidden.error.model';
 import basicAuthenticationMiddleware from '../middlewares/basic-authentication.middleware';
-import userRepository from '../repositories/user.repository';
+import jwtAuthenticationMiddleware from '../middlewares/jwt-authentication.middleware';
 
 const authorizationRoute = Router();
 
@@ -28,6 +28,14 @@ authorizationRoute.post(
     } catch (error) {
       next(error);
     }
+  }
+);
+
+authorizationRoute.post(
+  '/token/validate',
+  jwtAuthenticationMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.sendStatus(statusCodes.OK);
   }
 );
 
